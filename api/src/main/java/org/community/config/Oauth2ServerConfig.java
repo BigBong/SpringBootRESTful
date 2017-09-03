@@ -3,7 +3,6 @@ package org.community.config;
 import lombok.extern.slf4j.Slf4j;
 import org.community.service.OauthUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,12 +15,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
-import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
-import org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
-import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
@@ -34,9 +30,6 @@ import javax.sql.DataSource;
 @Configuration
 @EnableAuthorizationServer
 public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
-
-    @Value("${server.context-path}")
-    private String contextPath;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -89,8 +82,7 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security.tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()");
+        security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()").allowFormAuthenticationForClients();
     }
 
     @Override
@@ -101,20 +93,9 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager)
-                .approvalStore(approvalStore())
-                .authorizationCodeServices(authorizationCodeServices())
                 .tokenStore(tokenStore())
-                .userApprovalHandler(userApprovalHandler())
-                .userDetailsService(userDetailsService);
-        endpoints.prefix(contextPath);
-    }
-
-    @Bean
-    public TokenStoreUserApprovalHandler userApprovalHandler(){
-        TokenStoreUserApprovalHandler handler = new TokenStoreUserApprovalHandler();
-        handler.setTokenStore(tokenStore());
-        handler.setRequestFactory(new DefaultOAuth2RequestFactory(clientDetailsService()));
-        handler.setClientDetailsService(clientDetailsService());
-        return handler;
+                .userDetailsService(userDetailsService)
+                .approvalStore(approvalStore())
+                .authorizationCodeServices(authorizationCodeServices());
     }
 }

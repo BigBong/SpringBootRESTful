@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * Created by frodo on 2017/9/1.
  * http://www.cnblogs.com/jcli/p/springmvc_restful_version.html
  */
-//@Configuration
+@Configuration
 public class WebMvcConfigSupport extends WebMvcConfigurationSupport {
 
     @Override

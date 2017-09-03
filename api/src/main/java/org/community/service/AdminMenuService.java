@@ -30,7 +30,7 @@ public class AdminMenuService {
         AdminMenuGroupExample example = new AdminMenuGroupExample();
         List<AdminMenuGroup> list = adminMenuGroupMapper.selectByExample(example);
         adminMenu.groups = new ArrayList<>(list.size());
-        for (AdminMenuGroup group: list) {
+        for (AdminMenuGroup group : list) {
             AdminMenu.Group g = new AdminMenu.Group();
             adminMenu.groups.add(g);
             g.name = group.getTitle();
@@ -41,20 +41,20 @@ public class AdminMenuService {
             List<AdminMenuSubGroup> subGroupList = adminMenuSubGroupMapper.selectByExample(subGroupExample);
 
             g.groupItems = new ArrayList<>(subGroupList.size());
-            for (AdminMenuSubGroup subGroup: subGroupList) {
+            for (AdminMenuSubGroup subGroup : subGroupList) {
                 AdminMenu.GroupItem gi = new AdminMenu.GroupItem();
                 g.groupItems.add(gi);
                 gi.icon = subGroup.getIconClass();
                 gi.name = subGroup.getTitle();
 
                 AdminMenuItemExample itemExample = new AdminMenuItemExample();
-                AdminMenuItemExample.Criteria itemCriteria= itemExample.createCriteria();
+                AdminMenuItemExample.Criteria itemCriteria = itemExample.createCriteria();
                 itemCriteria.andParentGroupIdEqualTo(subGroup.getId());
                 List<AdminMenuItem> itemList = adminMenuItemMapper.selectByExample(itemExample);
 
                 gi.items = new ArrayList<>(itemList.size());
 
-                for (AdminMenuItem item: itemList) {
+                for (AdminMenuItem item : itemList) {
                     AdminMenu.Item i = new AdminMenu.Item();
                     gi.items.add(i);
                     i.name = item.getTitle();

@@ -31,42 +31,44 @@ def getProperties(fileName) {
     properties;
 }
 
-task mybatisGenerate << {
-    def properties = getProperties("mybatis-generator.properties")
+task mybatisGenerate {
+    doLast {
+        def properties = getProperties("mybatis-generator.properties")
 
-    def destDir = new File("src", 'main')
+        def destDir = new File("src", 'main')
 
-    ant.properties['targetProject'] = destDir.path
-    ant.properties['mysqlConnectorJarPath'] = "libs/mysql-connector-java-5.1.39.jar"
-    ant.properties['driverClass'] = properties.getProperty("jdbc.driverClassName")
-    ant.properties['connectionURL'] = properties.getProperty("jdbc.url")
-    ant.properties['userId'] = properties.getProperty("jdbc.user")
-    ant.properties['password'] = properties.getProperty("jdbc.pass")
-    ant.properties['src_main_java'] = sourceSets.main.java.srcDirs[0].path
-    ant.properties['src_main_resources'] = sourceSets.main.resources.srcDirs[0].path
-    ant.properties['modelPackage'] = properties.getProperty("generator.modelPackage")
-    ant.properties['mapperPackage'] = properties.getProperty("generator.mapperPackage")
-    ant.properties['sqlMapperPackage'] = properties.getProperty("generator.sqlMapperPackage")
+        ant.properties['targetProject'] = destDir.path
+        ant.properties['mysqlConnectorJarPath'] = "libs/mysql-connector-java-5.1.39.jar"
+        ant.properties['driverClass'] = properties.getProperty("jdbc.driverClassName")
+        ant.properties['connectionURL'] = properties.getProperty("jdbc.url")
+        ant.properties['userId'] = properties.getProperty("jdbc.user")
+        ant.properties['password'] = properties.getProperty("jdbc.pass")
+        ant.properties['src_main_java'] = sourceSets.main.java.srcDirs[0].path
+        ant.properties['src_main_resources'] = sourceSets.main.resources.srcDirs[0].path
+        ant.properties['modelPackage'] = properties.getProperty("generator.modelPackage")
+        ant.properties['mapperPackage'] = properties.getProperty("generator.mapperPackage")
+        ant.properties['sqlMapperPackage'] = properties.getProperty("generator.sqlMapperPackage")
 
-    ant.taskdef(
-            name: 'mbgenerator',
-            classname: 'org.mybatis.generator.ant.GeneratorAntTask',
-            classpath: configurations.mybatisGenerator.asPath
-    )
-    ant.mbgenerator(overwrite: true,
-            configfile: 'src/main/resources/mybatis/generator-config.xml', verbose: true) {
-        propertyset {
-            propertyref(name: 'targetProject')
-            propertyref(name: 'mysqlConnectorJarPath')
-            propertyref(name: 'userId')
-            propertyref(name: 'driverClass')
-            propertyref(name: 'connectionURL')
-            propertyref(name: 'password')
-            propertyref(name: 'src_main_java')
-            propertyref(name: 'src_main_resources')
-            propertyref(name: 'modelPackage')
-            propertyref(name: 'mapperPackage')
-            propertyref(name: 'sqlMapperPackage')
+        ant.taskdef(
+                name: 'mbgenerator',
+                classname: 'org.mybatis.generator.ant.GeneratorAntTask',
+                classpath: configurations.mybatisGenerator.asPath
+        )
+        ant.mbgenerator(overwrite: true,
+                configfile: 'src/main/resources/mybatis/generator-config.xml', verbose: true) {
+            propertyset {
+                propertyref(name: 'targetProject')
+                propertyref(name: 'mysqlConnectorJarPath')
+                propertyref(name: 'userId')
+                propertyref(name: 'driverClass')
+                propertyref(name: 'connectionURL')
+                propertyref(name: 'password')
+                propertyref(name: 'src_main_java')
+                propertyref(name: 'src_main_resources')
+                propertyref(name: 'modelPackage')
+                propertyref(name: 'mapperPackage')
+                propertyref(name: 'sqlMapperPackage')
+            }
         }
     }
 }

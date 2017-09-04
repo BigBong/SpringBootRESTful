@@ -3,4 +3,4 @@
 #  web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity,
 #  additional_information, autoapprove)
 # VALUES
-# ('admin-client', 'oauth2-services', 'admin-secret', 'read,write', 'password,authorization_code,refresh_token', 'http://localhost:8080/', 'role_admin', '7200', '0', NULL , 'false');
+# ('admin-client', 'oauth2-resource', 'admin-secret', 'read,write', 'password,authorization_code,refresh_token', 'http://localhost:8080/', 'role_admin', '7200', '0', NULL , 'false');

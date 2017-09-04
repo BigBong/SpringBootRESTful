@@ -14,34 +14,28 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/{version}/users")
-public class UserController implements RestResource<User> {
+public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @ApiVersion(1)
-    @GetMapping("/user/check")
+    @ApiVersion(2)
+    @GetMapping("/check")
     public ResponseEntity login(String username, String password) {
         return ResponseEntity.ok(userService.getByName(username));
     }
 
-    @ApiVersion(1)
     @GetMapping
-    @Override
     public List<User> list() {
         return userService.getAll();
     }
 
-    @ApiVersion(1)
     @GetMapping("/{id}")
-    @Override
     public User find(@PathVariable("id") Long id) {
         return userService.getById(id.intValue());
     }
 
-    @ApiVersion(1)
     @PostMapping
-    @Override
     public Long add(User user) {
         int resultCode = userService.addUser(user);
         if (resultCode == 0) {
@@ -54,12 +48,10 @@ public class UserController implements RestResource<User> {
     }
 
     @DeleteMapping("/{id}")
-    @Override
     public void delete(@PathVariable("id") Long id) {
     }
 
     @PutMapping
-    @Override
     public Long update(User entity) {
         return null;
     }
